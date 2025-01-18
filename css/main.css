@@ -4,6 +4,49 @@ main{
 
     #carrito {
         background-color: white;
+        padding:1rem;
+        width: 23rem ;
+        
+        #cajaListado {
+            #listado li {
+                display:flex;
+                flex-wrap: wrap;
+                justify-content:space-between;
+                span {
+                    align-content: center;
+                }
+                button{
+                    background-color: tomato;
+                    
+                    &:hover{
+                        background-color: var(--secondary-color);
+                        color: tomato;
+                    }
+                }
+                .butSignoMas, .butSignoMenos {
+                    width:2rem;
+                }
+            }
+            hr {
+                margin: 0.4rem 0;
+                border: none;
+                height: 1px;
+                background-color: var(--primary-color);
+            }
+        }
+
+        p {
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        #compraFinal {
+            display:flex;
+            flex-direction: column;
+            #butComprar{
+                margin-top: 0.5rem;
+            }
+        }
     }
 
     #flex{
@@ -11,9 +54,13 @@ main{
         display: flex; 
         justify-content: flex-end;
         gap: 1rem;
- 
-    }
 
+        button {
+            &:hover{
+                background-color: white;
+            }
+        }
+    }
 
     #plantas {
         display:grid;
@@ -25,6 +72,12 @@ main{
             background-color: white;
             padding: 1rem;
             border-radius: 8px;
+            transition: 0.4s;
+
+            &:hover{
+                transform: scale(1.03);
+                transition: 0.4s;
+            }
 
             img {
                 width: 100%;
@@ -47,14 +100,8 @@ main{
                 margin-top: 0.5rem;
                 padding: 0.6rem;
             }
-        
-
         }
-
-
-
     }
-
 }
 
 
