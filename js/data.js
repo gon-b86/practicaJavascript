@@ -1,4 +1,4 @@
-const plantas = [
+const plantas0 = [
     {
       id: 1,
       nombre: "Aloe Vera",
@@ -70,8 +70,10 @@ const plantas = [
       descripcion: "Planta resistente conocida como 'Lengua de Suegra'",
       precio: 11.99,
       stock: 22,
-    },
-    {
+    }
+  ];
+
+const plantas1 = [ {
       id: 10,
       nombre: "Palma Areca",
       imagen: "https://elnougarden.com/cdn/shop/products/Dypsis_lutescens_04.jpg?v=1624463783",
@@ -142,8 +144,11 @@ const plantas = [
       descripcion: "Cactus que florece con flores grandes y coloridas",
       precio: 10.99,
       stock: 20,
-    },
-    {
+    }
+  ];
+
+
+const plantas2 = [{
       id: 19,
       nombre: "Peperomia",
       imagen: "https://verdecora.es/blog/wp-content/uploads/2014/07/peperomia.jpg",
@@ -215,5 +220,8 @@ const plantas = [
         precio: 5.99,
         stock: 15,
       }
-  ];
+    ];
+
+// creo un array de arrays, para usarlos en la paginación
+const plantas = [plantas0, plantas1, plantas2]
   
