@@ -2,4 +2,10 @@
 
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css');
 
-@import url(class.css);
+@import url(layout.css);
+
+@import url(header.css);
+
+@import url(main.css);
+
+@import url(footer.css);
