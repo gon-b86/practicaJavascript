@@ -1,0 +1,36 @@
+header {
+   
+    box-shadow: 0rem 0.125rem 0.4375rem #ccc;
+    background-color: var(--primary-color);
+    color: var(--terciary-color);
+    
+
+    
+
+    .container{
+        display:flex;
+        flex-wrap: wrap;
+        justify-content:space-between;
+
+        ul{
+            display:flex;
+            flex-wrap: wrap;
+            justify-content:space-between;
+            
+            li {
+                padding: 0.4rem;
+                align-content: center;
+                font-weight: bold;
+            }
+
+            a {
+                color: var(--terciary-color);
+                font-size:1rem;
+                
+            }
+        }
+    }
+
+   
+   
+}

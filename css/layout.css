@@ -1,8 +1,9 @@
 :root {
     --primary-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    --primary-color: rgb(32, 137, 38);
+    --primary-color: rgb(41, 170, 48);
     --secondary-color: rgb(167, 195, 169);
-    --terciary-color: tomato;
+    --terciary-color: rgb(231, 245, 230);
+    --quarterly-color: tomato;
     --gap: 1rem;
 }
 
@@ -22,31 +23,28 @@ main {
 .container {
     max-width: 62.75rem;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
 }
 
 h1 {
-    color: black;
-    font-size: 2rem;
-    margin: 1rem 0;
+    color: var(--terciary-color);
+    font-size: 1.7rem;
     font-weight: bold;
+    padding: 0.6rem;
 }
 
 h2 {
     color: black;
-    font-size: 1rem;
-    margin: 1rem 0;
+    font-size: 1.2rem;
     font-weight: bold;
 }
 
 h3 {
     color: black;
     font-size: 1.2rem;
-    margin: 1rem 0;
     font-weight: bold;
 }
 
 p {
-    margin: 0.6rem 0;
     color: black;
 }
