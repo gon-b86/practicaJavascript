@@ -23,9 +23,14 @@ main{
                         color: tomato;
                     }
                 }
-                .butSignoMas, .butSignoMenos {
+                .mas{
                     width:2rem;
                 }
+                .menos{
+                    width:2rem;
+                }
+
+
             }
             hr {
                 margin: 0.4rem 0;
