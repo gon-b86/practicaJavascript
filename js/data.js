@@ -1,4 +1,16 @@
-const productos0 = [
+// Creo 3 objetos para simular la paginación
+
+// Cada objetos se compone de otro objeto a su vez y un array. El objeto tiene info sobre la página actual, siguiente y previa. El array tiene la propia info de los productos
+
+const productos1 = {
+
+  info: {
+    pages:3,
+    next: 2,
+    prev: null,
+  },
+
+  results: [
     {
       id: 1,
       nombre: "Aloe Vera",
@@ -71,9 +83,19 @@ const productos0 = [
       precio: 11.99,
       stock: 22,
     }
-  ];
+  ]
+};
 
-const productos1 = [ {
+const productos2 = {
+  
+  info: {
+    pages:3,
+    next: 3,
+    prev: 1,
+  },
+
+  results: [ 
+    {
       id: 10,
       nombre: "Palma Areca",
       imagen: "https://elnougarden.com/cdn/shop/products/Dypsis_lutescens_04.jpg?v=1624463783",
@@ -145,10 +167,20 @@ const productos1 = [ {
       precio: 10.99,
       stock: 20,
     }
-  ];
+  ]
+};
 
 
-const productos2 = [{
+const productos3 = {
+  
+  info: {
+    pages:3,
+    next: null,
+    prev: 2,
+  },
+
+  results: [
+    {
       id: 19,
       nombre: "Peperomia",
       imagen: "https://verdecora.es/blog/wp-content/uploads/2014/07/peperomia.jpg",
@@ -220,8 +252,7 @@ const productos2 = [{
         precio: 5.99,
         stock: 15,
       }
-    ];
+    ]
+};
 
-// creo un array de arrays, para usarlos en la paginación
-const productos = [productos0, productos1, productos2]
-  
+const productos = [productos1, productos2, productos3]
