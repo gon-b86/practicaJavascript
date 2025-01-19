@@ -1,4 +1,4 @@
-const plantas0 = [
+const productos0 = [
     {
       id: 1,
       nombre: "Aloe Vera",
@@ -73,7 +73,7 @@ const plantas0 = [
     }
   ];
 
-const plantas1 = [ {
+const productos1 = [ {
       id: 10,
       nombre: "Palma Areca",
       imagen: "https://elnougarden.com/cdn/shop/products/Dypsis_lutescens_04.jpg?v=1624463783",
@@ -148,7 +148,7 @@ const plantas1 = [ {
   ];
 
 
-const plantas2 = [{
+const productos2 = [{
       id: 19,
       nombre: "Peperomia",
       imagen: "https://verdecora.es/blog/wp-content/uploads/2014/07/peperomia.jpg",
@@ -223,5 +223,5 @@ const plantas2 = [{
     ];
 
 // creo un array de arrays, para usarlos en la paginación
-const plantas = [plantas0, plantas1, plantas2]
+const productos = [productos0, productos1, productos2]
   
