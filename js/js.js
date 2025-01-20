@@ -3,6 +3,7 @@
 
 const buttonsSigAnt = document.querySelectorAll('.container #flex button');
 const containerPlantas = document.querySelector('.container #plantas');
+const carritoListado = document.querySelector('#carrito #cajaListado #listado');
 
 
 // Función y Listener para manejar el evento de clic y cargar la página correspondiente
@@ -57,8 +58,15 @@ function printOneProduct(product, dom){
     p1.textContent=product.descripcion;
     const p2 = document.createElement('p');
     p2.textContent=`Precio: €${product.precio}`;
+
     const button = document.createElement('button');
     button.textContent = "Agregar al carrito";
+    button.addEventListener('click',agregarCarrito);
+    button.dataset.id=product.id;
+    button.dataset.nombre=product.nombre;
+    button.dataset.precio=product.precio;
+    button.dataset.precio=product.stock;
+
     figure.appendChild(img);
     div.append(figure, h3, p1, p2, button);
     article.appendChild(div);
@@ -72,64 +80,54 @@ function printAllProducts(list, dom){
 
 // función par a iniciar y en la que se definen los datasets de los botones de paginación
 
-function init (list){
 
+function agregarCarrito(event){
+   
+    const planta = event.target.dataset.nombre;
+    const precio = parseInt(event.target.dataset.precio);
+    const cantidad = 1;
+
+    // Verificar si el producto ya está en el carrito
+    const existe = Array.from(carritoListado.children).some(li => 
+        li.querySelector('span')?.textContent.includes(planta)
+    );
+    if (existe) {
+        alert("Ya has llevado este producto al carrito");
+        return; // Salir de la función si ya existe
+    }
+   
+    /* <li>
+        <span>Planta - €Imp x Cant</span>
+        <button class="butEliminar">Eliminar</button>
+        <button class="butSignoMas">+</button>
+        <button class="butSignoMenos">-</button>
+    </li>*/
+    
+    const li = document.createElement('li');
+    const span = document.createElement('span')
+    const butEliminar = document.createElement('button')
+    const butSignoMas = document.createElement('button')
+    const butSignoMenos = document.createElement('button')
+    const hr = document.createElement('hr')
+
+    span.textContent=`${planta} - €${precio} x ${cantidad}`;
+    butEliminar.textContent='Eliminar';
+    butSignoMas.textContent='+';
+    butSignoMas.classList.add('mas');
+    butSignoMenos.textContent='-';
+    butSignoMenos.classList.add('menos');
+    
+    li.append(span, butEliminar, butSignoMas, butSignoMenos);
+    carritoListado.append(li, hr);
+
+}
+
+
+function init (list){
     buttonsSigAnt[0].dataset.object = list.info.prev ? list.info.prev : null;
     buttonsSigAnt[1].dataset.object = list.info.next ? list.info.next : null;
-
     printAllProducts(list.results, containerPlantas);
-
     console.log(list.results)
-
-
-
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-    // A mirar con Juan (como sacar de aquí esta función pero que funcione)
-
-
-    function agregarCarrito(event){
-        /* <li>
-            <span>Planta - €Imp x Cant</span>
-            <button class="butEliminar">Eliminar</button>
-            <button class="butSignoMas">+</button>
-            <button class="butSignoMenos">-</button>
-        </li>*/
-        
-        const li = document.createElement('li');
-        const span = document.createElement('span')
-        const butEliminar = document.createElement('button')
-        const butSignoMas = document.createElement('button')
-        const butSignoMenos = document.createElement('button')
-        const hr = document.createElement('hr')
-        
-        span.textContent='Planta - €Imp x Cant';
-        butEliminar.textContent='Eliminar';
-        butSignoMas.textContent='+';
-        butSignoMenos.textContent='-';
-        butSignoMas.classList.add('mas');
-        butSignoMenos.classList.add('menos');
-        
-        li.append(span, butEliminar, butSignoMas, butSignoMenos);
-        carritoListado.append(li, hr);
-        
-    }
-
-    // capturo en el DOM el botón agregar al carrito y la caja donde pintarlo
-    const buttonAgregar = document.querySelectorAll('.container #plantas button');
-    const carritoListado = document.querySelector('#carrito #cajaListado #listado');
-    
-    // Función y listener para agregar al carrito
-    buttonAgregar.forEach(button => button.addEventListener('click',agregarCarrito));
-
-
-
-
 };
 
 // el script arranca cargando el primero objeto
