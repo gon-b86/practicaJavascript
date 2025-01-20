@@ -30,7 +30,67 @@ function goToPage(event) {
 
 buttonsSigAnt.forEach(button => button.addEventListener('click',goToPage));
 
+
+// función borrar del carrito
+
+function borrarProducto(event){
+    event.target.parentNode.remove() 
+}
+
+
+// función para agregar al Carrito
+
+function agregarCarrito(event){
+   
+    const planta = event.target.dataset.nombre;
+    const precio = parseInt(event.target.dataset.precio);
+    const cantidad = 1;
+
+    // Verificar si el producto ya está en el carrito
+    const existe = Array.from(carritoListado.children).some(li => 
+        li.querySelector('span')?.textContent.includes(planta)
+    );
+    if (existe) {
+        alert("Ya has agregado este producto al carrito");
+        return; // Salir de la función si ya existe
+    }
+   
+    /* <li>
+        <span>Planta - €Imp x Cant</span>
+        <button class="butEliminar">Eliminar</button>
+        <button class="butSignoMas">+</button>
+        <button class="butSignoMenos">-</button>
+    </li>*/
+    
+    const li = document.createElement('li');
+    const span = document.createElement('span')
+    const butEliminar = document.createElement('button')
+    const butSignoMas = document.createElement('button')
+    const butSignoMenos = document.createElement('button')
+    const hr = document.createElement('hr')
+
+    span.textContent=`${planta} - €${precio} x ${cantidad}`;
+
+    butEliminar.textContent='Eliminar';
+    butSignoMas.textContent='+';
+    butSignoMenos.textContent='-';
+
+    butSignoMas.classList.add('mas');
+    butSignoMenos.classList.add('menos');
+
+    butEliminar.addEventListener('click',borrarProducto);
+    /*butSignoMas.addEventListener('click',sumarUno);
+    butSignoMenos.addEventListener('click',restarUno);*/
+    
+
+    li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
+    carritoListado.append(li);
+
+}
+
+
 // función para crear y pintar los artículos
+
 /*
 <article>
     <div>
@@ -65,7 +125,7 @@ function printOneProduct(product, dom){
     button.dataset.id=product.id;
     button.dataset.nombre=product.nombre;
     button.dataset.precio=product.precio;
-    button.dataset.precio=product.stock;
+    button.dataset.stock=product.stock;
 
     figure.appendChild(img);
     div.append(figure, h3, p1, p2, button);
@@ -78,51 +138,9 @@ function printAllProducts(list, dom){
     list.forEach(product => printOneProduct(product, dom))
 }
 
+
+
 // función par a iniciar y en la que se definen los datasets de los botones de paginación
-
-
-function agregarCarrito(event){
-   
-    const planta = event.target.dataset.nombre;
-    const precio = parseInt(event.target.dataset.precio);
-    const cantidad = 1;
-
-    // Verificar si el producto ya está en el carrito
-    const existe = Array.from(carritoListado.children).some(li => 
-        li.querySelector('span')?.textContent.includes(planta)
-    );
-    if (existe) {
-        alert("Ya has llevado este producto al carrito");
-        return; // Salir de la función si ya existe
-    }
-   
-    /* <li>
-        <span>Planta - €Imp x Cant</span>
-        <button class="butEliminar">Eliminar</button>
-        <button class="butSignoMas">+</button>
-        <button class="butSignoMenos">-</button>
-    </li>*/
-    
-    const li = document.createElement('li');
-    const span = document.createElement('span')
-    const butEliminar = document.createElement('button')
-    const butSignoMas = document.createElement('button')
-    const butSignoMenos = document.createElement('button')
-    const hr = document.createElement('hr')
-
-    span.textContent=`${planta} - €${precio} x ${cantidad}`;
-    butEliminar.textContent='Eliminar';
-    butSignoMas.textContent='+';
-    butSignoMas.classList.add('mas');
-    butSignoMenos.textContent='-';
-    butSignoMenos.classList.add('menos');
-    
-    li.append(span, butEliminar, butSignoMas, butSignoMenos);
-    carritoListado.append(li, hr);
-
-}
-
-
 function init (list){
     buttonsSigAnt[0].dataset.object = list.info.prev ? list.info.prev : null;
     buttonsSigAnt[1].dataset.object = list.info.next ? list.info.next : null;
