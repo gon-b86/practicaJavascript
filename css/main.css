@@ -29,15 +29,17 @@ main{
                 .menos{
                     width:2rem;
                 }
-
+                hr {
+                    margin: 0.4rem 0;
+                    border: none;
+                    height: 1px;
+                    background-color: var(--primary-color);
+                    display: block;
+                    flex-basis: 100%; 
+                }
 
             }
-            hr {
-                margin: 0.4rem 0;
-                border: none;
-                height: 1px;
-                background-color: var(--primary-color);
-            }
+            
         }
 
         p {
