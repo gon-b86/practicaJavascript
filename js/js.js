@@ -4,7 +4,9 @@
 const buttonsSigAnt = document.querySelectorAll('.container #flex button');
 const containerPlantas = document.querySelector('.container #plantas');
 const carritoListado = document.querySelector('#carrito #cajaListado #listado');
-
+const importeTot = document.querySelector('#carrito #importeTot');
+const vaciarCarrito = document.querySelector('#carrito #icompraFinal #butVaciar');
+const comprar = document.querySelector('#carrito #icompraFinal #butComprar');
 
 // Función y Listener para manejar el evento de clic y cargar la página correspondiente
 
@@ -21,14 +23,31 @@ function goToPage(event) {
             case 3:
                 init(productos3);
                 break;
-            default:
-                console.log("Listado no válido."); 
-                break;
         }
     }
 }
 
 buttonsSigAnt.forEach(button => button.addEventListener('click',goToPage));
+
+
+// función para calcular y pintar el Total del carrito
+
+function calcularTotal() {
+    const listaItems = carritoListado.querySelectorAll('li');
+    let total = 0;
+    // Sumatorio de todos los pxq
+    listaItems.forEach(item => {
+        total += parseInt(item.dataset.pxq || 0);
+    });
+    // Actualizar el spanTot en importeTot
+    let spanTot = importeTot.querySelector('span');
+    if (!spanTot) {
+        spanTot = document.createElement('span');
+        importeTot.appendChild(spanTot);
+    }
+    spanTot.textContent = `€${total}`;
+}
+
 
 // función para agregar al Carrito
 
@@ -36,6 +55,7 @@ function agregarCarrito(event){
    
     const planta = event.target.dataset.nombre;
     const precio = parseInt(event.target.dataset.precio);
+    const stock = parseInt(event.target.dataset.stock);
 
     // Verificar si el producto ya está en el carrito
     const existe = Array.from(carritoListado.children).some(li => 
@@ -55,40 +75,61 @@ function agregarCarrito(event){
     
     const li = document.createElement('li');
     li.dataset.cant=1;
-    const span = document.createElement('span')
-    const butEliminar = document.createElement('button')
-    const butSignoMas = document.createElement('button')
-    const butSignoMenos = document.createElement('button')
-    const hr = document.createElement('hr')
+    li.dataset.pxq=li.dataset.cant * precio
 
+    const span = document.createElement('span')
     span.textContent=`${planta} - €${precio} x ${li.dataset.cant}`;
 
+    const butEliminar = document.createElement('button')
     butEliminar.textContent='Eliminar';
-    butSignoMas.textContent='+';
-    butSignoMenos.textContent='-';
 
+    const butSignoMas = document.createElement('button')
+    butSignoMas.textContent='+';
     butSignoMas.classList.add('mas');
+
+    const butSignoMenos = document.createElement('button')
+    butSignoMenos.textContent='-';
     butSignoMenos.classList.add('menos');
 
+    const hr = document.createElement('hr')
+    
+    //Creación de Eventos Listeners en eventos
+
     butEliminar.addEventListener('click', () => {
-        li.remove(); 
+        li.remove();
+        calcularTotal(); 
     });
+
     butSignoMas.addEventListener('click', () => {
-        li.dataset.cant = parseInt(li.dataset.cant)+1;
-        span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;
-    });
-    butSignoMenos.addEventListener('click', () => {
-        if (li.dataset.cant > 1) { 
-            li.dataset.cant =parseInt(li.dataset.cant -1);
-            span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;  
-        } else {
-            li.remove();
+        if(li.dataset.cant < stock){
+            li.dataset.cant = parseInt(li.dataset.cant)+1;
+            span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;
+            li.dataset.pxq = parseInt(li.dataset.cant) * precio;
+            calcularTotal();
+        }else{
+            alert("Ya no hay más stock de este producto");
         }
     });
 
-    
+    butSignoMenos.addEventListener('click', () => {
+        let cantidadActual = parseInt(li.dataset.cant);
+        if (cantidadActual > 1) {
+            cantidadActual -= 1; 
+            li.dataset.cant = cantidadActual; 
+            span.textContent = `${planta} - €${precio} x ${cantidadActual}`; 
+            li.dataset.pxq = cantidadActual * precio; 
+            calcularTotal(); // Recalcula el total
+        } else {
+            li.remove(); // Elimina el producto si la cantidad llega a 0
+            calcularTotal(); // Recalcula el total tras eliminar el producto
+        }
+    });
+
+
     li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
     carritoListado.append(li);
+
+    calcularTotal();
 }
 
 
@@ -111,21 +152,27 @@ function agregarCarrito(event){
 */
 
 function printOneProduct(product, dom){
+
     const article = document.createElement('article');
     const div = document.createElement('div');
     const figure = document.createElement('figure');
+
     const img = document.createElement('img');
     img.src= product.imagen;
     img.alt= product.nombre;
+
     const h3 =document.createElement('h3');
     h3.textContent = product.nombre;
+
     const p1 = document.createElement('p');
     p1.textContent=product.descripcion;
+
     const p2 = document.createElement('p');
     p2.textContent=`Precio: €${product.precio}`;
 
     const button = document.createElement('button');
     button.textContent = "Agregar al carrito";
+
     button.addEventListener('click',agregarCarrito);
     button.dataset.id=product.id;
     button.dataset.nombre=product.nombre;
