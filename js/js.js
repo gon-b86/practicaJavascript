@@ -30,21 +30,12 @@ function goToPage(event) {
 
 buttonsSigAnt.forEach(button => button.addEventListener('click',goToPage));
 
-
-// función borrar del carrito
-
-function borrarProducto(event){
-    event.target.parentNode.remove() 
-}
-
-
 // función para agregar al Carrito
 
 function agregarCarrito(event){
    
     const planta = event.target.dataset.nombre;
     const precio = parseInt(event.target.dataset.precio);
-    const cantidad = 1;
 
     // Verificar si el producto ya está en el carrito
     const existe = Array.from(carritoListado.children).some(li => 
@@ -63,13 +54,14 @@ function agregarCarrito(event){
     </li>*/
     
     const li = document.createElement('li');
+    li.dataset.cant=1;
     const span = document.createElement('span')
     const butEliminar = document.createElement('button')
     const butSignoMas = document.createElement('button')
     const butSignoMenos = document.createElement('button')
     const hr = document.createElement('hr')
 
-    span.textContent=`${planta} - €${precio} x ${cantidad}`;
+    span.textContent=`${planta} - €${precio} x ${li.dataset.cant}`;
 
     butEliminar.textContent='Eliminar';
     butSignoMas.textContent='+';
@@ -78,15 +70,28 @@ function agregarCarrito(event){
     butSignoMas.classList.add('mas');
     butSignoMenos.classList.add('menos');
 
-    butEliminar.addEventListener('click',borrarProducto);
-    /*butSignoMas.addEventListener('click',sumarUno);
-    butSignoMenos.addEventListener('click',restarUno);*/
-    
+    butEliminar.addEventListener('click', () => {
+        li.remove(); 
+    });
+    butSignoMas.addEventListener('click', () => {
+        li.dataset.cant = parseInt(li.dataset.cant)+1;
+        span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;
+    });
+    butSignoMenos.addEventListener('click', () => {
+        if (li.dataset.cant > 1) { 
+            li.dataset.cant =parseInt(li.dataset.cant -1);
+            span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;  
+        } else {
+            li.remove();
+        }
+    });
 
+    
     li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
     carritoListado.append(li);
-
 }
+
+
 
 
 // función para crear y pintar los artículos
