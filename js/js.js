@@ -61,31 +61,54 @@ function calcularTotal() {
 }
 
 
-// Funciones para aumentar y disminuir cantidad
+// Función auxiliar: Obtener el producto global
 
-function incrementarCantidad(li, span, precio, stock) {
-    if (li.dataset.cant < stock) {
+function obtenerProductoGlobal(nombre) {
+    return [...productos1.results, ...productos2.results, ...productos3.results].find(p => p.nombre === nombre);
+}
+
+
+// Función para incrementar la cantidad y ajustar el stock
+
+function incrementarCantidad(li, span, precio) {
+    const productoGlobal = obtenerProductoGlobal(li.dataset.nombre);
+    if (productoGlobal.stock > 0) {
         li.dataset.cant = parseInt(li.dataset.cant) + 1;
         span.textContent = `${li.dataset.nombre} - €${precio} x ${li.dataset.cant}`;
         li.dataset.pxq = parseInt(li.dataset.cant) * precio;
         calcularTotal();
+        productoGlobal.stock -= 1;
     } else {
-        alert("Ya no hay más stock de este producto");
+        alert("No hay suficiente stock disponible");
     }
 }
 
+
+// Función para disminuir la cantidad y ajustar el stock
+
 function disminuirCantidad(li, span, precio) {
-    let cantidadActual = parseInt(li.dataset.cant);
+    const cantidadActual = parseInt(li.dataset.cant);
+    const productoGlobal = obtenerProductoGlobal(li.dataset.nombre);
     if (cantidadActual > 1) {
-        cantidadActual -= 1;
-        li.dataset.cant = cantidadActual;
-        span.textContent = `${li.dataset.nombre} - €${precio} x ${cantidadActual}`;
-        li.dataset.pxq = cantidadActual * precio;
+        li.dataset.cant = cantidadActual - 1;
+        span.textContent = `${li.dataset.nombre} - €${precio} x ${li.dataset.cant}`;
+        li.dataset.pxq = li.dataset.cant * precio;
         calcularTotal();
+        productoGlobal.stock += 1;
     } else {
-        li.remove(); // Elimina el producto si la cantidad llega a 0
-        calcularTotal();
+        eliminarProductoDelCarrito(li);
     }
+}
+
+
+// Función para eliminar el producto del carrito y restablecer el stock
+
+function eliminarProductoDelCarrito(li) {
+    const productoGlobal = obtenerProductoGlobal(li.dataset.nombre);
+    const cantidadActual = parseInt(li.dataset.cant);
+    productoGlobal.stock += cantidadActual;
+    li.remove();
+    calcularTotal();
 }
 
 
@@ -94,15 +117,20 @@ function disminuirCantidad(li, span, precio) {
 function agregarCarrito(event) {
     const planta = event.target.dataset.nombre;
     const precio = parseInt(event.target.dataset.precio);
-    const stock = parseInt(event.target.dataset.stock);
+    const productoGlobal = obtenerProductoGlobal(planta);
+
+    if (productoGlobal.stock <= 0) {
+        alert("No hay suficiente stock para agregar este producto al carrito");
+        return;
+    }
 
     // Verificar si el producto ya está en el carrito
-    const existe = Array.from(carritoListado.children).some(li => 
-        li.querySelector('span')?.textContent.includes(planta)
+    const existe = Array.from(carritoListado.children).find(li =>
+        li.dataset.nombre === planta
     );
     if (existe) {
-        alert("Ya has agregado este producto al carrito");
-        return; // Salir de la función si ya existe
+        incrementarCantidad(existe, existe.querySelector('span'), precio);
+        return;
     }
 
     // Crear el nuevo elemento <li>
@@ -128,18 +156,14 @@ function agregarCarrito(event) {
     const hr = document.createElement('hr');
 
     // Crear Eventos Listeners para Eliminar, Más y Menos
-    butEliminar.addEventListener('click', () => {
-        li.remove();
-        calcularTotal();
-    });
-
-    // Delegar la lógica de incremento y decremento a las funciones externas
-    butSignoMas.addEventListener('click', () => incrementarCantidad(li, span, precio, stock));
+    butEliminar.addEventListener('click', () => eliminarProductoDelCarrito(li));
+    butSignoMas.addEventListener('click', () => incrementarCantidad(li, span, precio));
     butSignoMenos.addEventListener('click', () => disminuirCantidad(li, span, precio));
 
     li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
     carritoListado.append(li);
 
+    productoGlobal.stock -= 1;
     calcularTotal();
 }
 
@@ -147,24 +171,31 @@ function agregarCarrito(event) {
 // Función para vaciar el carrito
 
 vaciarCarrito.addEventListener('click', () => {
-    if(carritoListado.childElementCount === 0){
+    if (carritoListado.childElementCount === 0) {
         alert("El carrito está vacío");
-    }else{
-        carritoListado.innerHTML = ''; // Vacía todos los elementos <li>
-        calcularTotal(); // Recalcula el total (debería ser 0)
-    } 
+    } else {
+        Array.from(carritoListado.children).forEach(li => {
+            const productoGlobal = obtenerProductoGlobal(li.dataset.nombre);
+            const cantidad = parseInt(li.dataset.cant);
+            productoGlobal.stock += cantidad;
+        });
+        carritoListado.innerHTML = '';
+        calcularTotal();
+    }
 });
 
 
-// Función para comprar los productos
-// PDTE NO ME SALE
-// PDTE NO ME SALE
-// PDTE NO ME SALE
-// PDTE NO ME SALE
-// PDTE NO ME SALE
-// PDTE NO ME SALE
-// PDTE NO ME SALE
+// Comprar productos
 
+comprar.addEventListener('click', () => {
+    if (carritoListado.childElementCount === 0) {
+        alert("El carrito está vacío");
+        return;
+    }
+    carritoListado.innerHTML = '';
+    calcularTotal();
+    alert("Compra realizada satisfactoriamente");
+});
 
 
 // Función para crear y pintar los artículos
@@ -195,7 +226,6 @@ function printOneProduct(product, dom){
     button.dataset.id=product.id;
     button.dataset.nombre=product.nombre;
     button.dataset.precio=product.precio;
-    button.dataset.stock=product.stock;
 
     figure.appendChild(img);
     div.append(figure, h3, p1, p2, button);
@@ -215,7 +245,6 @@ function init (list){
     buttonsSigAnt[0].dataset.object = list.info.prev ? list.info.prev : null;
     buttonsSigAnt[1].dataset.object = list.info.next ? list.info.next : null;
     printAllProducts(list.results, containerPlantas);
-    console.log(list.results)
 };
 
 
