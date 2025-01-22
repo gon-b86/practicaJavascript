@@ -5,8 +5,20 @@ const buttonsSigAnt = document.querySelectorAll('.container #flex button');
 const containerPlantas = document.querySelector('.container #plantas');
 const carritoListado = document.querySelector('#carrito #cajaListado #listado');
 const importeTot = document.querySelector('#carrito #importeTot');
-const vaciarCarrito = document.querySelector('#carrito #icompraFinal #butVaciar');
-const comprar = document.querySelector('#carrito #icompraFinal #butComprar');
+const vaciarCarrito = document.querySelector('#carrito #compraFinal #butVaciar');
+const comprar = document.querySelector('#carrito #compraFinal #butComprar');
+const clickCarrito = document.querySelector('header #clickCarrito');
+const carrito = document.querySelector('#carrito');
+
+
+// Para hacer la transición del carrito que aparezca y desaparezca
+
+if (clickCarrito && carrito) {
+    clickCarrito.addEventListener('click', () => {
+        carrito.classList.toggle('visible');
+    });
+}
+
 
 // Función y Listener para manejar el evento de clic y cargar la página correspondiente
 
@@ -30,7 +42,7 @@ function goToPage(event) {
 buttonsSigAnt.forEach(button => button.addEventListener('click',goToPage));
 
 
-// función para calcular y pintar el Total del carrito
+// Función para calcular y pintar el Total del carrito
 
 function calcularTotal() {
     const listaItems = carritoListado.querySelectorAll('li');
@@ -49,13 +61,13 @@ function calcularTotal() {
 }
 
 
-// función para agregar al Carrito
+// Función para agregar productos al Carrito
 
 function agregarCarrito(event){
    
     const planta = event.target.dataset.nombre;
     const precio = parseInt(event.target.dataset.precio);
-    const stock = parseInt(event.target.dataset.stock);
+    const stock = parseInt(event.target.dataset.stock);    
 
     // Verificar si el producto ya está en el carrito
     const existe = Array.from(carritoListado.children).some(li => 
@@ -93,7 +105,7 @@ function agregarCarrito(event){
 
     const hr = document.createElement('hr')
     
-    //Creación de Eventos Listeners en eventos
+    //Creación de Eventos Listeners
 
     butEliminar.addEventListener('click', () => {
         li.remove();
@@ -125,7 +137,6 @@ function agregarCarrito(event){
         }
     });
 
-
     li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
     carritoListado.append(li);
 
@@ -133,12 +144,37 @@ function agregarCarrito(event){
 }
 
 
+// Función para vaciar el carrito
+
+vaciarCarrito.addEventListener('click', () => {
+    if(carritoListado.childElementCount === 0){
+        alert("El carrito está vacío");
+    }else{
+        carritoListado.innerHTML = ''; // Vacía todos los elementos <li>
+        calcularTotal(); // Recalcula el total (debería ser 0)
+    } 
+});
 
 
-// función para crear y pintar los artículos
+// Función para comprar los productos
+// PDTE
+// PDTE
+// PDTE
+// PDTE
+// PDTE
+// PDTE
+// PDTE
+// PDTE
+// PDTE
 
-/*
-<article>
+
+
+
+// Función para crear y pintar los artículos
+
+function printOneProduct(product, dom){
+
+/* <article>
     <div>
         <figure>
             <img src="https://naturalpoland.com/wp-content/uploads/aloe-vera-in-africa.jpg" alt="AloeVera">
@@ -148,10 +184,7 @@ function agregarCarrito(event){
         <p>Precio: €14</p>
         <button>Agregar al carrito</button>
     </div>
-</article>
-*/
-
-function printOneProduct(product, dom){
+</article> */
 
     const article = document.createElement('article');
     const div = document.createElement('div');
@@ -191,8 +224,8 @@ function printAllProducts(list, dom){
 }
 
 
+// Función par a iniciar y en la que se definen los datasets de los botones de paginación
 
-// función par a iniciar y en la que se definen los datasets de los botones de paginación
 function init (list){
     buttonsSigAnt[0].dataset.object = list.info.prev ? list.info.prev : null;
     buttonsSigAnt[1].dataset.object = list.info.next ? list.info.next : null;
@@ -200,7 +233,8 @@ function init (list){
     console.log(list.results)
 };
 
-// el script arranca cargando el primero objeto
+
+// El script arranca cargando el primero objeto
 init (productos1)
 
 
