@@ -20,7 +20,7 @@ if (clickCarrito && carrito) {
 }
 
 
-// Función y Listener para manejar el evento de clic y cargar la página correspondiente
+// Función y Listener para cargar la página correspondiente
 
 function goToPage(event) {
     const pagina = parseInt(event.target.dataset.object); 
@@ -61,13 +61,40 @@ function calcularTotal() {
 }
 
 
+// Funciones para aumentar y disminuir cantidad
+
+function incrementarCantidad(li, span, precio, stock) {
+    if (li.dataset.cant < stock) {
+        li.dataset.cant = parseInt(li.dataset.cant) + 1;
+        span.textContent = `${li.dataset.nombre} - €${precio} x ${li.dataset.cant}`;
+        li.dataset.pxq = parseInt(li.dataset.cant) * precio;
+        calcularTotal();
+    } else {
+        alert("Ya no hay más stock de este producto");
+    }
+}
+
+function disminuirCantidad(li, span, precio) {
+    let cantidadActual = parseInt(li.dataset.cant);
+    if (cantidadActual > 1) {
+        cantidadActual -= 1;
+        li.dataset.cant = cantidadActual;
+        span.textContent = `${li.dataset.nombre} - €${precio} x ${cantidadActual}`;
+        li.dataset.pxq = cantidadActual * precio;
+        calcularTotal();
+    } else {
+        li.remove(); // Elimina el producto si la cantidad llega a 0
+        calcularTotal();
+    }
+}
+
+
 // Función para agregar productos al Carrito
 
-function agregarCarrito(event){
-   
+function agregarCarrito(event) {
     const planta = event.target.dataset.nombre;
     const precio = parseInt(event.target.dataset.precio);
-    const stock = parseInt(event.target.dataset.stock);    
+    const stock = parseInt(event.target.dataset.stock);
 
     // Verificar si el producto ya está en el carrito
     const existe = Array.from(carritoListado.children).some(li => 
@@ -77,65 +104,38 @@ function agregarCarrito(event){
         alert("Ya has agregado este producto al carrito");
         return; // Salir de la función si ya existe
     }
-   
-    /* <li>
-        <span>Planta - €Imp x Cant</span>
-        <button class="butEliminar">Eliminar</button>
-        <button class="butSignoMas">+</button>
-        <button class="butSignoMenos">-</button>
-    </li>*/
-    
+
+    // Crear el nuevo elemento <li>
     const li = document.createElement('li');
-    li.dataset.cant=1;
-    li.dataset.pxq=li.dataset.cant * precio
+    li.dataset.cant = 1;
+    li.dataset.pxq = li.dataset.cant * precio;
+    li.dataset.nombre = planta;
 
-    const span = document.createElement('span')
-    span.textContent=`${planta} - €${precio} x ${li.dataset.cant}`;
+    const span = document.createElement('span');
+    span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;
 
-    const butEliminar = document.createElement('button')
-    butEliminar.textContent='Eliminar';
+    const butEliminar = document.createElement('button');
+    butEliminar.textContent = 'Eliminar';
 
-    const butSignoMas = document.createElement('button')
-    butSignoMas.textContent='+';
+    const butSignoMas = document.createElement('button');
+    butSignoMas.textContent = '+';
     butSignoMas.classList.add('mas');
 
-    const butSignoMenos = document.createElement('button')
-    butSignoMenos.textContent='-';
+    const butSignoMenos = document.createElement('button');
+    butSignoMenos.textContent = '-';
     butSignoMenos.classList.add('menos');
 
-    const hr = document.createElement('hr')
-    
-    //Creación de Eventos Listeners
+    const hr = document.createElement('hr');
 
+    // Crear Eventos Listeners para Eliminar, Más y Menos
     butEliminar.addEventListener('click', () => {
         li.remove();
-        calcularTotal(); 
+        calcularTotal();
     });
 
-    butSignoMas.addEventListener('click', () => {
-        if(li.dataset.cant < stock){
-            li.dataset.cant = parseInt(li.dataset.cant)+1;
-            span.textContent = `${planta} - €${precio} x ${li.dataset.cant}`;
-            li.dataset.pxq = parseInt(li.dataset.cant) * precio;
-            calcularTotal();
-        }else{
-            alert("Ya no hay más stock de este producto");
-        }
-    });
-
-    butSignoMenos.addEventListener('click', () => {
-        let cantidadActual = parseInt(li.dataset.cant);
-        if (cantidadActual > 1) {
-            cantidadActual -= 1; 
-            li.dataset.cant = cantidadActual; 
-            span.textContent = `${planta} - €${precio} x ${cantidadActual}`; 
-            li.dataset.pxq = cantidadActual * precio; 
-            calcularTotal(); // Recalcula el total
-        } else {
-            li.remove(); // Elimina el producto si la cantidad llega a 0
-            calcularTotal(); // Recalcula el total tras eliminar el producto
-        }
-    });
+    // Delegar la lógica de incremento y decremento a las funciones externas
+    butSignoMas.addEventListener('click', () => incrementarCantidad(li, span, precio, stock));
+    butSignoMenos.addEventListener('click', () => disminuirCantidad(li, span, precio));
 
     li.append(span, butEliminar, butSignoMas, butSignoMenos, hr);
     carritoListado.append(li);
@@ -157,34 +157,19 @@ vaciarCarrito.addEventListener('click', () => {
 
 
 // Función para comprar los productos
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-// PDTE
-
+// PDTE NO ME SALE
+// PDTE NO ME SALE
+// PDTE NO ME SALE
+// PDTE NO ME SALE
+// PDTE NO ME SALE
+// PDTE NO ME SALE
+// PDTE NO ME SALE
 
 
 
 // Función para crear y pintar los artículos
 
 function printOneProduct(product, dom){
-
-/* <article>
-    <div>
-        <figure>
-            <img src="https://naturalpoland.com/wp-content/uploads/aloe-vera-in-africa.jpg" alt="AloeVera">
-        </figure>
-        <h3>Nombre de la planta</h3>
-        <p>Descripción de la planta</p>
-        <p>Precio: €14</p>
-        <button>Agregar al carrito</button>
-    </div>
-</article> */
 
     const article = document.createElement('article');
     const div = document.createElement('div');
